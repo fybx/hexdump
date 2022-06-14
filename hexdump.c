@@ -24,14 +24,14 @@ void print_special(char);
 
 int main(int argc, char* argv[]) {
     FILE* file;
-    fpos_t fstart;
-    long fsize;
+    fpos_t fstart; /* fpos_t struct pointing to start of file */
+    long fsize; /* file size  */
     
-    int ccount;
-    int lcount = 0;
-    int pIter, cIter;
-    char* cv;
-    char c;
+    int ccount; /* column count */
+    int lcount = 0; /* line count */
+    int pIter, cIter; /* print iterator & character iterator*/
+    char* cv; /* character vector */
+    char c; /*character read from file */
     
     ccount = atoi(argv[2]) ? atoi(argv[2]) : 4;
     
@@ -43,12 +43,12 @@ int main(int argc, char* argv[]) {
     fgetpos(file, &fstart);
 
     cv = calloc(ccount, sizeof(char));
-    /* get file size to calculate how many lines will be printed */
+    /* get file size by seeking to end of file and reading position */
     fseek(file, 0L, SEEK_END);
-    fsize = ftell(file);
-    lcount = fsize / ccount;
+    fsize = ftell(file); /* ftell returns in bytes */
+    lcount = fsize / ccount; /* ccount gives count of bytes to print each line */
     
-    fsetpos(file, &fstart);
+    fsetpos(file, &fstart); /* reset position to start of file */
     for (pIter = 0; pIter < lcount; pIter++) {
         printf(GRN "%*d " RES, dig(lcount), pIter + 1);
         for (cIter = 0; cIter < ccount; cIter++) {
