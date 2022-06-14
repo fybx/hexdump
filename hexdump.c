@@ -9,6 +9,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define RED   "\x1B[31m"
+#define GRN   "\x1B[32m"
+#define YEL   "\x1B[33m"
+#define BLU   "\x1B[34m"
+#define MAG   "\x1B[35m"
+#define CYN   "\x1B[36m"
+#define WHT   "\x1B[37m"
+#define RES "\x1B[0m"
+
 void to_bin(char);
 int dig(int);
 void print_special(char);
@@ -24,6 +33,7 @@ int main(int argc, char* argv[]) {
     char* cv;
     char c;
     
+
     col = atoi(argv[2]) ? atoi(argv[2]) : 4;
     file = fopen(argv[1], "r");
     if (file == NULL) {
@@ -116,5 +126,5 @@ void print_special(char c) {
     if ((int)c == 0x7F)
         printf("^?");
     else
-        printf("%s", controlCode[(int)c]);
+        printf(RED "%s" RES, controlCode[(int)c]);
 }
