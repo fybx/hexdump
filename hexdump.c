@@ -18,8 +18,8 @@
 #define WHT   "\x1B[37m"
 #define RES "\x1B[0m"
 
-void to_bin(char);
-int dig(int);
+void print_binary(char);
+int get_digits(int);
 void print_special(char);
 
 int main(int argc, char* argv[]) {
@@ -50,12 +50,12 @@ int main(int argc, char* argv[]) {
     
     fsetpos(file, &fstart); /* reset position to start of file */
     for (pIter = 0; pIter < lcount; pIter++) {
-        printf(GRN "%*d " RES, dig(lcount), pIter + 1);
+        printf(GRN "%*d " RES, get_digits(lcount), pIter + 1);
         for (cIter = 0; cIter < ccount; cIter++) {
             if (!feof(file)) {
                 c = fgetc(file);
                 *(cv + cIter) = c;
-                to_bin(c);
+                print_binary(c);
             }
             printf(" ");
         }
@@ -74,13 +74,13 @@ int main(int argc, char* argv[]) {
     return(0);
 }
 
-void to_bin(char c) {
+void print_binary(char c) {
     char i = 0;
     for (; i < 8; i++)
         printf("%d", !!((c << i) & 0x80));
 }
 
-int dig(int n) {
+int get_digits(int n) {
     int c = 0;
     while (n) {
         n /= 10;
@@ -91,40 +91,12 @@ int dig(int n) {
 
 void print_special(char c) {
     char* controlCode[32] = {
-        "^@",
-        "^A",
-        "^B",
-        "^C",
-        "^D",
-        "^E",
-        "^F",
-        "^G",
-        "^H",
-        "^I",
-        "^J",
-        "^K",
-        "^L",
-        "^M",
-        "^N",
-        "^O",
-        "^P",
-        "^Q",
-        "^R",
-        "^S",
-        "^T",
-        "^U",
-        "^V",
-        "^W",
-        "^X",
-        "^Y",
-        "^Z",
-        "^[",
-        "^\\",
-        "^]",
-        "^^",
-        "^_",
+        "^@", "^A", "^B", "^C", "^D", "^E", "^F", "^G",
+        "^H", "^I", "^J", "^K", "^L", "^M", "^N", "^O",
+        "^P", "^Q", "^R", "^S", "^T", "^U", "^V", "^W",
+        "^X", "^Y", "^Z", "^[", "^\\", "^]", "^^", "^_"
     };
-    if ((int)c == 0x7F)
+    if (c == 0x7F)
         printf("^?");
     else
         printf(RED "%s" RES, controlCode[(int)c]);
