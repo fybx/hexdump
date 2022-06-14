@@ -33,7 +33,6 @@ int main(int argc, char* argv[]) {
     char* cv;
     char c;
     
-
     col = atoi(argv[2]) ? atoi(argv[2]) : 4;
     file = fopen(argv[1], "r");
     if (file == NULL) {
@@ -50,7 +49,7 @@ int main(int argc, char* argv[]) {
     
     fsetpos(file, &fstart);
     for (pIter = 0; pIter < lcount; pIter++) {
-        printf("%*d ", dig(lcount), pIter + 1);
+        printf(GRN "%*d " RES, dig(lcount), pIter + 1);
         for (cIter = 0; cIter < col; cIter++) {
             if (!feof(file)) {
                 c = fgetc(file);
@@ -69,6 +68,7 @@ int main(int argc, char* argv[]) {
         printf("\n");
     }
 
+    free(cv);
     fclose(file);
     return(0);
 }
