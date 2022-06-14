@@ -27,13 +27,14 @@ int main(int argc, char* argv[]) {
     fpos_t fstart;
     long fsize;
     
-    int col;
+    int ccount;
     int lcount = 0;
     int pIter, cIter;
     char* cv;
     char c;
     
-    col = atoi(argv[2]) ? atoi(argv[2]) : 4;
+    ccount = atoi(argv[2]) ? atoi(argv[2]) : 4;
+    
     file = fopen(argv[1], "r");
     if (file == NULL) {
         puts("file cannot be opened");
@@ -41,16 +42,16 @@ int main(int argc, char* argv[]) {
     }
     fgetpos(file, &fstart);
 
-    cv = calloc(col, sizeof(char));
+    cv = calloc(ccount, sizeof(char));
     /* get file size to calculate how many lines will be printed */
     fseek(file, 0L, SEEK_END);
     fsize = ftell(file);
-    lcount = fsize / col;
+    lcount = fsize / ccount;
     
     fsetpos(file, &fstart);
     for (pIter = 0; pIter < lcount; pIter++) {
         printf(GRN "%*d " RES, dig(lcount), pIter + 1);
-        for (cIter = 0; cIter < col; cIter++) {
+        for (cIter = 0; cIter < ccount; cIter++) {
             if (!feof(file)) {
                 c = fgetc(file);
                 *(cv + cIter) = c;
@@ -58,7 +59,7 @@ int main(int argc, char* argv[]) {
             }
             printf(" ");
         }
-        for (cIter = 0; cIter < col; cIter++) {
+        for (cIter = 0; cIter < ccount; cIter++) {
             if (*(cv + cIter) == 0x7F || (0x1F >= *(cv + cIter) && *(cv + cIter) >= 0))
                 print_special(*(cv + cIter));
             else
