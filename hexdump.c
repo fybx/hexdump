@@ -27,14 +27,41 @@ int main(int argc, char* argv[]) {
     fpos_t fstart; /* fpos_t struct pointing to start of file */
     long fsize; /* file size  */
     
-    int ccount; /* column count */
-    int lcount = 0; /* line count */
-    int pIter, cIter; /* print iterator & character iterator*/
+    int ccount = 4; /* column count */
+    long lcount = 0; /* line count */
+    int pIter, cIter; /* print iterator & character iterator */
     char* cv; /* character vector */
     char c; /*character read from file */
-    
-    ccount = atoi(argv[2]) ? atoi(argv[2]) : 4;
-    
+    int viter; /* argument vector iterator */
+    int pformat = -1; /* print format, hex or bin */
+    int pctrl = 1; /* print control codes */
+    int color = 1; /* print colored output */
+
+    char* argipctrl; /* argument input for pctrl */
+    char* argicolor; /* argument input for color */
+
+
+    argipctrl = calloc(3, sizeof(char));
+    argicolor = calloc(3, sizeof(char));
+    if (argc == 1) {
+        puts("hexdump by fyb."); 
+        return(0);
+    } 
+    for (viter = 2; viter < argc; ++viter) {
+        pformat = strcmp("-bin", argv[viter]) == 0 || pformat == 0;
+        pformat = strcmp("-hex", argv[viter]) == 1 || pformat == 1; /* last seen -hex or -bin will set pformat */
+        if (strstr(argv[viter], "-pctrl=") != NULL) {
+            sscanf(argv[viter], "-pctrl=%s", argipctrl);
+            pctrl = !strcmp("yes", argipctrl);
+        
+        } else if (strstr(argv[viter], "-ncol=") != NULL) {
+            sscanf(argv[viter], "-ncol=%d", &ccount);
+        } else if (strstr(argv[viter], "-color=") != NULL) {
+            sscanf(argv[viter], "-color=%s", argicolor);
+            color = !strcmp("yes", argicolor);     
+        }
+    }
+
     file = fopen(argv[1], "r");
     if (file == NULL) {
         puts("file cannot be opened");
